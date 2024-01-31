@@ -1,0 +1,12 @@
+#!/bin/bash
+
+echo "Enter password for postgres:"
+read -s password
+
+sudo -u postgres bash <<EOF
+export PGPASSWORD=$password
+dropdb ticket_booking
+createdb ticket_booking
+psql -U postgres -d ticket_booking -c "GRANT ALL PRIVILEGES ON SCHEMA public TO zed;"
+EOF
+

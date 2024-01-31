@@ -1,0 +1,44 @@
+package templates
+
+import "github.com/1-Zed-1/Bus-Booking/modules/data"
+import "fmt"
+
+templ RenderGroups(groups []data.Group) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>Orders Page</title>
+			<script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+		</head>
+		<body>
+			<div class="swapme" hx-push-url="true">
+				<ul>
+					for _, item := range groups {
+						<li hx-get={ fmt.Sprintf("/data-api/get-buses/%d", item.ID) } hx-target=".swapme" hx-push-url="true">{ item.Name }</li>
+					}
+				</ul>
+			</div>
+		</body>
+	</html>
+}
+
+templ RenderBuses(buses []data.Bus) {
+	<ul>
+		for _, item := range buses {
+			<li hx-get={ fmt.Sprintf("/data-api/get-seats/%d", item.ID) } hx-target=".swapme" hx-push-url="true">{ item.LicencePlate },{ item.PhoneNumber } { item.Shedule }</li>
+		}
+	</ul>
+}
+
+templ RenderSeats(seats []data.Seat) {
+	<ul>
+		for _, seats := range seats {
+			<li>{ fmt.Sprintf("%d",seats.ID) }</li>
+			<li>{ seats.SeatNumber }</li>
+			<li>{ fmt.Sprintf("%d",seats.PassengerID) }</li>
+			<li>{ fmt.Sprintf("%t",seats.IsBooked) }</li>
+		}
+	</ul>
+}
